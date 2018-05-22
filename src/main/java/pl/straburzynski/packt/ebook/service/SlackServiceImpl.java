@@ -11,10 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.straburzynski.packt.ebook.config.ApplicationConfig;
 import pl.straburzynski.packt.ebook.exception.SendingMessageToSlackException;
-import pl.straburzynski.packt.ebook.model.Ebook;
-import pl.straburzynski.packt.ebook.model.SlackAction;
-import pl.straburzynski.packt.ebook.model.SlackAttachment;
-import pl.straburzynski.packt.ebook.model.SlackMessage;
+import pl.straburzynski.packt.ebook.model.*;
+import pl.straburzynski.packt.ebook.model.slack.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,6 +23,7 @@ import java.util.List;
 public class SlackServiceImpl implements SlackService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
+
     private final ApplicationConfig applicationConfig;
     private final EbookService ebookService;
 
@@ -34,15 +33,62 @@ public class SlackServiceImpl implements SlackService {
         this.applicationConfig = applicationConfig;
     }
 
+    private Message prepareSlackMessage(Ebook ebook) {
+        return Message.builder()
+                .username(applicationConfig.getBotName())
+                .icon_emoji(":book:")
+                .attachments(prepareAttachments(ebook))
+                .build();
+    }
+
+    private List<Attachment> prepareAttachments(Ebook ebook) {
+        List<Attachment> attachments = new ArrayList<>();
+        attachments.add(Attachment.builder()
+                .title(ebook.getTitle())
+                .title_link(ebook.getBookUrl())
+                .color(String.valueOf(Color.BLUE))
+                .text(ebook.getDescription())
+                .build());
+        attachments.add(Attachment.builder()
+                .title(ebook.getTitle())
+                .image_url(prepareUrl(ebook.getImageUrl()))
+                .thumb_url(prepareUrl(ebook.getImageUrl()))
+                .color(String.valueOf(Color.ORANGE))
+                .actions(prepareActions(ebook.getBookUrl()))
+                .build());
+        return attachments;
+    }
+
+    private List<Action> prepareActions(String ebookUrl) {
+        List<Action> actions = new ArrayList<>();
+        actions.add(Action.builder()
+                .type(String.valueOf(Type.BUTTON))
+                .text("I want this book")
+                .url(applicationConfig.getPacktFreeEbookUrl())
+                .style(String.valueOf(Style.PRIMARY))
+                .build());
+        actions.add(Action.builder()
+                .type(String.valueOf(Type.BUTTON))
+                .text("Show me more details")
+                .url(prepareUrl(ebookUrl))
+                .style(String.valueOf(Style.DEFAULT))
+                .build());
+        return actions;
+    }
+    
+    private String prepareUrl(String url) {
+        return url.replace(" ", "%20");
+    }
+
     @Override
-    @Scheduled(cron = "0 0 13 ? * *")
+    @Scheduled(cron = "${app.scheduler-time}")
     public void sendMessageToSlack() throws URISyntaxException {
         Ebook ebook = ebookService.getTodayFreeEbookDataFromPackt();
-        SlackMessage slackMessage = prepareSlackMessage(ebook);
+        Message message = prepareSlackMessage(ebook);
 
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(applicationConfig.getSlackWebhookUrl());
-        RequestEntity<?> request = new RequestEntity<>(slackMessage, HttpMethod.POST, uri);
+        RequestEntity<?> request = new RequestEntity<>(message, HttpMethod.POST, uri);
         ResponseEntity<?> response = restTemplate.exchange(request, String.class);
         if (response.getStatusCode().is2xxSuccessful()) {
             log.info("Message sent successfully. " + ebook.toString().replace("\n", " "));
@@ -52,49 +98,6 @@ public class SlackServiceImpl implements SlackService {
             log.error(error);
             throw new SendingMessageToSlackException(error);
         }
-    }
-
-    private SlackMessage prepareSlackMessage(Ebook ebook) {
-        return SlackMessage.builder()
-                .username(applicationConfig.getBotName())
-                .icon_emoji(":book:")
-                .attachments(prepareAttachments(ebook))
-                .build();
-    }
-
-    private List<SlackAttachment> prepareAttachments(Ebook ebook) {
-        List<SlackAttachment> attachments = new ArrayList<>();
-        attachments.add(SlackAttachment.builder()
-                .title(ebook.getTitle())
-                .title_link(ebook.getBookUrl())
-                .color("#007bff")
-                .text(ebook.getDescription())
-                .build());
-        attachments.add(SlackAttachment.builder()
-                .text(ebook.getTitle())
-                .image_url(ebook.getImageUrl())
-                .thumb_url(ebook.getImageUrl())
-                .color("#f36e28")
-                .actions(prepareActions(ebook.getBookUrl()))
-                .build());
-        return attachments;
-    }
-
-    private List<SlackAction> prepareActions(String ebookUrl) {
-        List<SlackAction> actions = new ArrayList<>();
-        actions.add(SlackAction.builder()
-                .type("button")
-                .text("I want this book")
-                .url(applicationConfig.getPacktFreeEbookUrl())
-                .style("primary")
-                .build());
-        actions.add(SlackAction.builder()
-                .type("button")
-                .text("Show me more details")
-                .url(ebookUrl)
-                .style("default")
-                .build());
-        return actions;
     }
 
 }

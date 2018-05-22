@@ -1,4 +1,4 @@
-package pl.straburzynski.packt.ebook.model;
+package pl.straburzynski.packt.ebook.model.slack;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class SlackAction {
+public class Action {
 
     private String type;
     private String text;

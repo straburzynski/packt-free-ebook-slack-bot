@@ -1,4 +1,4 @@
-package pl.straburzynski.packt.ebook.model;
+package pl.straburzynski.packt.ebook.model.slack;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class SlackAttachment {
+public class Attachment {
 
     private String title;
     private String title_link;
@@ -19,6 +19,6 @@ public class SlackAttachment {
     private String text;
     private String image_url;
     private String thumb_url;
-    private List<SlackAction> actions;
+    private List<Action> actions;
 
 }

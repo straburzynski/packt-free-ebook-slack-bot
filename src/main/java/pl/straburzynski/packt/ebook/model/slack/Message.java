@@ -1,4 +1,4 @@
-package pl.straburzynski.packt.ebook.model;
+package pl.straburzynski.packt.ebook.model.slack;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,10 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class SlackMessage {
+public class Message {
 
     private String username;
     private String icon_emoji;
-    private List<SlackAttachment> attachments;
+    private List<Attachment> attachments;
 
 }
