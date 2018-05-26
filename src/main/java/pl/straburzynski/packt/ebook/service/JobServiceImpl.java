@@ -2,6 +2,7 @@ package pl.straburzynski.packt.ebook.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.straburzynski.packt.ebook.exception.JobNotFoundException;
 import pl.straburzynski.packt.ebook.model.Job;
 import pl.straburzynski.packt.ebook.repository.JobRepository;
 
@@ -36,6 +37,14 @@ public class JobServiceImpl implements JobService {
     @Override
     public Job saveJob(Job job) {
         return jobRepository.save(job);
+    }
+
+    @Override
+    public void deleteJob(Long id) {
+        Optional<Job> job = jobRepository.findById(id);
+        jobRepository.delete(job.orElseThrow(
+                () -> new JobNotFoundException("Job not found"))
+        );
     }
 
 }

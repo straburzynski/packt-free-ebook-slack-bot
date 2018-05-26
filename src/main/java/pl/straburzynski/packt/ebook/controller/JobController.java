@@ -31,10 +31,17 @@ public class JobController {
         return new ResponseEntity<>(jobService.getAllJobs(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     @ApiOperation("Get job by id")
-    public ResponseEntity<?> getJobById(@RequestParam("id") Long id) {
+    public ResponseEntity<?> getJobById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(jobService.findById(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    @ApiOperation("Delete job by id")
+    public ResponseEntity<?> deleteJobById(@PathVariable("id") Long id) {
+        jobService.deleteJob(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

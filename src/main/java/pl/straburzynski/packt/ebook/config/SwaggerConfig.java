@@ -36,4 +36,5 @@ public class SwaggerConfig {
                         "sebastian@straburzynski.pl"))
                 .build();
     }
+
 }

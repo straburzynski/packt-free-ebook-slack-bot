@@ -16,26 +16,26 @@ import javax.persistence.*;
 public class Job {
 
     @Id
-    @Column(name="id", unique=true, updatable=false, nullable=false)
+    @Column(name = "id", unique = true, updatable = false, nullable = false)
     @GeneratedValue
     private long id;
 
-    @Column(name="job_name", unique=true, updatable=true, nullable=false)
+    @Column(name = "job_name", unique = true, updatable = true, nullable = false)
     private String jobName;
 
-    @Column(name="bot_name", unique=false, updatable=true, nullable=true)
+    @Column(name = "bot_name", unique = false, updatable = true, nullable = true)
     private String botName;
 
-    @Column(name="channel", unique=false, updatable=true, nullable=true)
+    @Column(name = "channel", unique = false, updatable = true, nullable = true)
     private String channel;
 
-    @Column(name="webhook", unique=false, updatable=true, nullable=false)
+    @Column(name = "webhook", unique = false, updatable = true, nullable = false)
     private String webhook;
 
-    @Column(name="scheduler", unique=false, updatable=true, nullable=false)
+    @Column(name = "scheduler", unique = false, updatable = true, nullable = false)
     private String scheduler;
 
-    @Column(name="active", unique=false, updatable=true, nullable=false)
+    @Column(name = "active", unique = false, updatable = true, nullable = false)
     private boolean active;
 
 }

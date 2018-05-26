@@ -11,4 +11,5 @@ public interface JobService {
     Optional<Job> findById(Long id);
     Optional<Job> findByJobName(String jobName);
     Job saveJob(Job job);
+    void deleteJob(Long id);
 }
