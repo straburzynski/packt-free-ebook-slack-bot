@@ -1,9 +1,11 @@
 package pl.straburzynski.packt.ebook.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.straburzynski.packt.ebook.model.Ebook;
@@ -26,14 +28,17 @@ public class EbookController {
     }
 
     @GetMapping
+    @ApiOperation("Get today free ebook data")
     public ResponseEntity<?> getTodayFreeEbookData() {
         Ebook ebook = ebookService.getTodayFreeEbookDataFromPackt();
         return new ResponseEntity<>(ebook, HttpStatus.OK);
     }
 
-    @GetMapping("/send")
+    @PostMapping("/send")
+    @ApiOperation("Send ebook message to slack with default configuration")
     public ResponseEntity<?> send() throws URISyntaxException {
         slackService.sendMessageToSlack();
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

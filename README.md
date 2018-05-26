@@ -34,9 +34,12 @@ $ java -jar target/ebook-0.0.1-SNAPSHOT.jar
 - [ ] Web admin dashboard with configurable parameters
 - [ ] Multiple Slack webhooks handling
 - [ ] Configurable cron scheduler with Quartz support
+- [x] H2 single file database
 
 #### To do
 
-- [ ] Enums for styles, types, colors etc.
+- [x] Enums for styles, types, colors etc.
 - [ ] Disable sending with null fields -> exceptions 
-- [ ] Move cron expression to properties
+- [x] Move cron expression to properties
+- [x] Job model with CRUD for managing multiple slack workspaces/channels
+- [x] Swagger UI for documenting REST API
