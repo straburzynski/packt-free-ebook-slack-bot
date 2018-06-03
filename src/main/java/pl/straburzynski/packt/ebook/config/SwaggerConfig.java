@@ -27,8 +27,8 @@ public class SwaggerConfig {
 
     private ApiInfo metaData() {
         return new ApiInfoBuilder()
-                .title("Pack free ebook API")
-                .description("\"Spring Boot REST API\"")
+                .title("Packt free ebook API")
+                .description("Spring Boot REST API for slack integration and packt publishing")
                 .version("0.0.1")
                 .contact(new Contact(
                         "Sebastian Straburzynski",

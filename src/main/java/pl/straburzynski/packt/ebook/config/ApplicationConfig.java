@@ -22,4 +22,10 @@ public class ApplicationConfig {
     @Value("${app.slack-webhook-url}")
     private String slackWebhookUrl;
 
+    @Value("${packt.user.email}")
+    private String userEmail;
+
+    @Value("${packt.user.password}")
+    private String userPassword;
+
 }
