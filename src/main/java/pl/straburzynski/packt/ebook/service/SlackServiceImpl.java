@@ -24,13 +24,15 @@ public class SlackServiceImpl implements SlackService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+    private final JobService jobService;
     private final ApplicationConfig applicationConfig;
     private final EbookService ebookService;
 
     @Autowired
-    public SlackServiceImpl(EbookService ebookService, ApplicationConfig applicationConfig) {
+    public SlackServiceImpl(EbookService ebookService, ApplicationConfig applicationConfig, JobService jobService) {
         this.ebookService = ebookService;
         this.applicationConfig = applicationConfig;
+        this.jobService = jobService;
     }
 
     private Message prepareSlackMessage(Ebook ebook) {
@@ -98,6 +100,11 @@ public class SlackServiceImpl implements SlackService {
             log.error(error);
             throw new SendingMessageToSlackException(error);
         }
+    }
+
+    @Override
+    public void sendMessageToSlack(Long jobId) {
+        // todo
     }
 
 }

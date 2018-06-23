@@ -6,4 +6,6 @@ public interface SlackService {
 
     void sendMessageToSlack() throws URISyntaxException;
 
+    void sendMessageToSlack(Long jobId);
+
 }

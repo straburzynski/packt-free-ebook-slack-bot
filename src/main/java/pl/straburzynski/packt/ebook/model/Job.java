@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -37,5 +38,16 @@ public class Job {
 
     @Column(name = "active", unique = false, updatable = true, nullable = false)
     private boolean active;
+
+    @Column(name = "created_date", unique = false, updatable = true, nullable = false)
+    private LocalDateTime createdDate;
+
+    @Column(name = "start_date", unique = false, updatable = true, nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date", unique = false, updatable = true, nullable = true)
+    private LocalDateTime endDate;
+
+
 
 }
