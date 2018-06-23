@@ -1,6 +1,6 @@
-# Pack free ebook - slack bot
+# Packt free ebook - slack bot
 
-Slack bot for sending daily free random ebook from Packt Publishing.
+Slackt] bot for sending daily free random ebook from Packt Publishing.
 
 ![Slack preview](img/slack_preview.png)
 
@@ -43,3 +43,36 @@ $ java -jar target/ebook-0.0.1-SNAPSHOT.jar
 - [x] Move cron expression to properties
 - [x] Job model with CRUD for managing multiple slack workspaces/channels
 - [x] Swagger UI for documenting REST API
+
+
+#### Example POST request for creating new job (quartz)
+
+Example request packt ebook to slack everyday at 13:30 (1:30AM).
+
+Create new Quartz scheduler job:
+```
+{
+  "active": true,
+  "jobName": "drugi task inny",
+  "scheduler": "* 30 13 ? * * *",
+  "webhook": "https://hooks.slack.com/services/xxxxxxxxx/yyyyyyyyy/zzzzzzzzzzzzzzzzzzzzzzzz"
+  "startDate": "2018-06-22T11:41:03.457Z",
+  "endDate": "2018-06-22T11:41:03.457Z",
+}
+```
+
+Create new slack job in db:
+```
+{
+  "active": true,
+  "botName": "Packt Publishing Bot",
+  "channel": "#ebook",
+  "createdDate": "2018-06-23T20:27:55.393Z",
+  "endDate": "2018-06-23T20:27:55.393Z",
+  "jobName": "Job for Example Slack",
+  "scheduler": "* 30 13 ? * * *",
+  "startDate": "2018-06-23T20:27:55.393Z",
+  "webhook": "https://hooks.slack.com/services/xxxxxxxxx/yyyyyyyyy/zzzzzzzzzzzzzzzzzzzzzzzz"
+}
+```
+
