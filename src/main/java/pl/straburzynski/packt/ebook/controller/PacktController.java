@@ -34,20 +34,20 @@ public class PacktController {
         return new ResponseEntity<>(ebook, HttpStatus.OK);
     }
 
-    @PostMapping("/send-to-slack")
+    @PostMapping("send-to-slack")
     @ApiOperation("Send ebook message to slack with default configuration")
     public ResponseEntity<?> send() throws URISyntaxException {
         slackService.sendMessageToSlack();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/check-credentials")
+    @PostMapping("check-credentials")
     @ApiOperation("Check if login/password are correct")
     public ResponseEntity<?> checkCredentials() {
         return new ResponseEntity<>(ebookService.checkLogin(), HttpStatus.OK);
     }
 
-    @PostMapping("/claim-ebook")
+    @PostMapping("claim-ebook")
     @ApiOperation("Claim free ebook from Packt")
     public ResponseEntity<?> claimEbook() {
         ebookService.claimFreeEbookFromPackt();

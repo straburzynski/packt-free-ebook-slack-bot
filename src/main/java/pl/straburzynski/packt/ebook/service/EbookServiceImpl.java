@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 import pl.straburzynski.packt.ebook.config.ApplicationConfig;
 import pl.straburzynski.packt.ebook.exception.ClaimingEbookException;
 import pl.straburzynski.packt.ebook.exception.CouldNotConnectToPacktWebsiteException;
+import pl.straburzynski.packt.ebook.exception.InvalidEbookException;
 import pl.straburzynski.packt.ebook.exception.LoginFailedException;
 import pl.straburzynski.packt.ebook.model.Ebook;
+import pl.straburzynski.packt.ebook.model.ValidationMessage;
+import pl.straburzynski.packt.ebook.utils.Validator;
 import pl.straburzynski.packt.ebook.utils.WebDriverUtils;
 import us.codecraft.xsoup.Xsoup;
 
@@ -33,7 +36,6 @@ public class EbookServiceImpl implements EbookService {
     private final String USER_EMAIL_ID = "edit-name";
     private final String USER_PASSWORD_ID = "edit-pass";
     private final String USER_LOGIN_BUTTON_ID = "edit-post-form";
-    private final String HTTP_PREFIX = "http:";
 
     private final ApplicationConfig applicationConfig;
 
@@ -46,12 +48,19 @@ public class EbookServiceImpl implements EbookService {
     public Ebook getTodayFreeEbookDataFromPackt() {
         try {
             Document doc = Jsoup.connect(applicationConfig.getPacktFreeEbookUrl()).get();
-            return Ebook.builder()
+            Ebook ebook = Ebook.builder()
                     .title(doc.getElementsByClass(BOOK_TITLE_CLASS).text())
                     .description(prepareDescription(doc))
                     .bookUrl(applicationConfig.getPacktBaseUrl() + Xsoup.compile(BOOK_URL_XPATH).evaluate(doc).get())
-                    .imageUrl(HTTP_PREFIX + Xsoup.compile(BOOK_IMAGE_URL_XPATH).evaluate(doc).get())
+                    .imageUrl(Xsoup.compile(BOOK_IMAGE_URL_XPATH).evaluate(doc).get())
                     .build();
+            ValidationMessage validationMessage = Validator.validateEbook(ebook);
+            if (validationMessage.isValid()) {
+                return ebook;
+            } else {
+                String messages = validationMessage.getMessages().toString();
+                throw new InvalidEbookException(messages);
+            }
         } catch (IOException e) {
             throw new CouldNotConnectToPacktWebsiteException("Could not connect to Packt website");
         }

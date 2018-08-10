@@ -1,5 +1,9 @@
 package pl.straburzynski.packt.ebook.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,15 +43,19 @@ public class Job {
     @Column(name = "active", unique = false, updatable = true, nullable = false)
     private boolean active;
 
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @Column(name = "created_date", unique = false, updatable = true, nullable = false)
     private LocalDateTime createdDate;
 
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @Column(name = "start_date", unique = false, updatable = true, nullable = false)
     private LocalDateTime startDate;
 
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @Column(name = "end_date", unique = false, updatable = true, nullable = true)
     private LocalDateTime endDate;
-
-
 
 }

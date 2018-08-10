@@ -17,6 +17,7 @@ public class WebDriverUtils {
             .headless(true)
             .userAgent(userAgent)
             .timezone(Timezone.AMERICA_NEWYORK)
+            .connectTimeout(15000)
             .build();
 
     public static boolean isElementPresent(By elementBy, JBrowserDriver driver) {

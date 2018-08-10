@@ -106,7 +106,12 @@
 			<artifactId>cron-utils</artifactId>
 			<version>7.0.1</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
