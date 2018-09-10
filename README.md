@@ -1,6 +1,6 @@
 # Packt free ebook - slack bot
 
-Slackt] bot for sending daily free random ebook from Packt Publishing.
+Slack bot for sending daily free random ebook from Packt Publishing.
 
 ![Slack preview](img/slack_preview.png)
 
