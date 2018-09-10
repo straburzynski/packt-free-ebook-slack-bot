@@ -1,5 +1,6 @@
 package pl.straburzynski.packt.ebook.service;
 
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import pl.straburzynski.packt.ebook.exception.JobNotFoundException;
 import pl.straburzynski.packt.ebook.model.Job;
 import pl.straburzynski.packt.ebook.repository.JobRepository;
 
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -57,9 +59,18 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void deleteJob(Long id) {
+    public Job editJob(Job job) throws ParseException, SchedulerException {
+        validationService.validate(job);
+        Job editedJob = jobRepository.save(job);
+        schedulerJobService.restartAllActivePacktJobs();
+        return editedJob;
+    }
+
+    @Override
+    public void deleteJob(Long id) throws ParseException, SchedulerException {
         Optional<Job> job = jobRepository.findById(id);
         jobRepository.delete(job.orElseThrow(() -> new JobNotFoundException("Job not found")));
+        schedulerJobService.restartAllActivePacktJobs();
     }
 
 }

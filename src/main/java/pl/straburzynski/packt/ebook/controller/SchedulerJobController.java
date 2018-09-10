@@ -51,14 +51,14 @@ public class SchedulerJobController {
     }
 
     @PostMapping(value = "/start")
-    public ResponseEntity<?> startAllPushNotifications() throws SchedulerException, ParseException {
+    public ResponseEntity<?> startAllJobs() throws SchedulerException, ParseException {
         return schedulerJobService.startAllActivePacktJobs()
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping(value = "/restart")
-    public ResponseEntity<?> restartAllPushNotifications() throws SchedulerException, ParseException {
+    public ResponseEntity<?> restartAllJobs() throws SchedulerException, ParseException {
         return schedulerJobService.restartAllActivePacktJobs()
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

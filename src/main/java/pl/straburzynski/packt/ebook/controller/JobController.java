@@ -1,12 +1,15 @@
 package pl.straburzynski.packt.ebook.controller;
 
 import io.swagger.annotations.ApiOperation;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.straburzynski.packt.ebook.model.Job;
 import pl.straburzynski.packt.ebook.service.JobService;
+
+import java.text.ParseException;
 
 @RestController
 @RequestMapping(value = "/jobs")
@@ -25,6 +28,13 @@ public class JobController {
         return new ResponseEntity<>(jobService.saveJob(job), HttpStatus.CREATED);
     }
 
+    @PutMapping("{id}")
+    @ApiOperation("Edit job")
+    public ResponseEntity<?> editJob(@RequestBody Job job, @PathVariable("id") Long id) throws ParseException, SchedulerException {
+        job.setId(id);
+        return new ResponseEntity<>(jobService.editJob(job), HttpStatus.OK);
+    }
+
     @GetMapping
     @ApiOperation("Get all jobs")
     public ResponseEntity<?> getAllJobs() {
@@ -39,7 +49,7 @@ public class JobController {
 
     @DeleteMapping("{id}")
     @ApiOperation("Delete job by id")
-    public ResponseEntity<?> deleteJobById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteJobById(@PathVariable("id") Long id) throws ParseException, SchedulerException {
         jobService.deleteJob(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

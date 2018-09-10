@@ -32,12 +32,13 @@ $ java -jar target/ebook-0.0.1-SNAPSHOT.jar
 - [x] Configurable parameters in application.properties
 - [ ] Create external config.properties file outside jar for dynamic parameters
 - [ ] Web admin dashboard with configurable parameters
-- [ ] Multiple Slack webhooks handling
-- [ ] Configurable cron scheduler with Quartz support
+- [x] Multiple Slack webhooks handling
+- [x] Configurable cron scheduler with Quartz support
 - [x] H2 single file database
 
 #### To do
 
+- [x] Save daily ebook to db, if exists for current day get from db instead of remote request
 - [x] Enums for styles, types, colors etc.
 - [ ] Disable sending with null fields -> exceptions 
 - [x] Move cron expression to properties
@@ -53,7 +54,7 @@ Create new Quartz scheduler job:
 ```
 {
   "active": true,
-  "jobName": "drugi task inny",
+  "jobName": "Another task",
   "scheduler": "* 30 13 ? * * *",
   "webhook": "https://hooks.slack.com/services/xxxxxxxxx/yyyyyyyyy/zzzzzzzzzzzzzzzzzzzzzzzz"
   "startDate": "2018-06-22T11:41:03.457Z",
