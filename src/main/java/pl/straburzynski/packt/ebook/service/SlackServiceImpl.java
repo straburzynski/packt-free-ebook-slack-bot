@@ -124,7 +124,7 @@ public class SlackServiceImpl implements SlackService {
         Job job = jobService.findById(jobId).orElseThrow(
                 () -> new JobNotFoundException("Job " + jobId + "not found!")
         );
-        if (now.isAfter(job.getStartDate()) && now.isBefore(job.getEndDate()) && job.isActive()) {
+        if (job.isActive() && now.isAfter(job.getStartDate()) && handleEndDate(job.getEndDate(), now)) {
             log.info("Task with job " + jobId + " is ready to execute");
             Ebook ebook = ebookService.getTodayFreeEbookDataFromPackt();
             Message message = prepareSlackMessage(ebook, job);
@@ -133,6 +133,14 @@ public class SlackServiceImpl implements SlackService {
             doRestTemplateExchange(ebook, message, restTemplate, uri);
         } else {
             log.info("Task with job " + jobId + " is out of date range or disabled");
+        }
+    }
+
+    private boolean handleEndDate(LocalDateTime endDate, LocalDateTime now) {
+        if (endDate == null) {
+            return true;
+        } else {
+            return now.isBefore(endDate);
         }
     }
 

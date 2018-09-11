@@ -1,0 +1,38 @@
+.logo {
+    width: 120px;
+    height: 31px;
+    background: rgba(255,255,255,.2);
+    margin: 16px 24px 16px 0;
+    float: left;
+}
+
+.title {
+    color: #eeeeee;
+    font-size: 18px;
+}
+
+.top-menu {
+    line-height: 64px;
+    float: right;
+}
+
+.content {
+    padding: 50px 50px;
+}
+
+.layout.ant-layout {
+    min-height: 100vh;
+}
+
+.top-menu a {
+    padding: 0 20px;
+}
+
+.top-menu a.active {
+    background: #1890ff;
+    color: white;
+}
+
+.ant-menu-item {
+    padding: 0;
+}

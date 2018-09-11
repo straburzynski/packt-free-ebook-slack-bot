@@ -1,0 +1,19 @@
+.active-job {
+    background: #00ac00;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 15px 15px 0 10px;
+}
+
+.inactive-job {
+    background: #821d01;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 15px 15px 0 10px;
+}
+
+.ant-list-item-meta-description {
+    color: #4c4c4c;
+}
