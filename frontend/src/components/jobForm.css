@@ -1,0 +1,31 @@
+/* Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) {
+    .job .ant-form-vertical .ant-form-item-label {
+        text-align: left;
+        padding: 0 0 8px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {
+    .job .ant-form-vertical .ant-form-item-label {
+        padding: 6px 20px 8px;
+        text-align: right;
+    }
+}
+
+/* Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {
+    .job .ant-form-vertical .ant-form-item-label {
+        padding: 6px 20px 8px;
+        text-align: right;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+    .job .ant-form-vertical .ant-form-item-label {
+        padding: 6px 20px 8px;
+        text-align: right;
+    }
+}

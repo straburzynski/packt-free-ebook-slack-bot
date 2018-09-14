@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {Avatar, Button, List} from 'antd';
+import {Avatar, Button, List, Modal} from 'antd';
 import Moment from "react-moment";
 import moment from 'moment';
 import './job.css'
@@ -22,19 +22,43 @@ export class Job extends React.Component {
     };
 
     render() {
+
+        let that = this;
+
+        function showDeleteConfirm() {
+            Modal.confirm({
+                title: 'Are you sure delete this job?',
+                content: 'Some descriptions',
+                okText: 'Yes',
+                okType: 'danger',
+                cancelText: 'No',
+                iconType: 'delete',
+                iconClassName: 'red',
+                onOk() {
+                    console.log('OK', that.props.id);
+                },
+                onCancel() {
+                    console.log('Cancel');
+                },
+            });
+        }
+
         return (
             <List.Item
+                className='job'
                 key={this.props.id}
                 actions={[
                     <Link to={`/job/${this.props.id}`}>
                         <Button type="default" icon="edit">Edit</Button>
                     </Link>,
-                    <Button type="danger" icon="delete">Delete</Button>
+                        <Button type="danger" icon="delete" onClick={showDeleteConfirm}>Delete</Button>
+
+
                 ]}
             >
                 <List.Item.Meta
                     avatar={
-                        <Avatar className={this.props.active ? 'active-job' : 'inactive-job'}/>
+                        <Avatar className={this.props.active ? 'active-job' : 'inactive-job'}></Avatar>
                     }
                     title={
                         <Link to={`/job/${this.props.id}`}>

@@ -1,3 +1,7 @@
+.layout {
+    min-width: 600px;
+}
+
 .logo {
     width: 120px;
     height: 31px;
