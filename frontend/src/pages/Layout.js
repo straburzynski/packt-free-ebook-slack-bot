@@ -2,16 +2,20 @@ import React, {Component} from 'react';
 import './layout.css'
 import {Icon, Layout, Menu} from 'antd';
 import AppRouter from "../routers/AppRouter";
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
 
 const {Header, Content, Footer} = Layout;
-export default class AppLayout extends Component {
+export class AppLayout extends Component {
+
+    goToHome = () => {
+        this.props.history.push('/');
+    };
 
     render() {
         return (
             <Layout className="layout">
                 <Header>
-                    <span className="title">
+                    <span className="title" onClick={this.goToHome}>
                         Slackt <Icon type="right" theme="outlined" className="orange"/> Packt Slack Bot
                     </span>
                     <Menu
@@ -35,7 +39,7 @@ export default class AppLayout extends Component {
                 <Content className="content">
                         <AppRouter/>
                 </Content>
-                <Footer style={{textAlign: 'center'}}>
+                <Footer className="text-center">
                     Slackt | Packt Slack Bot ©2018 <a href="http://github.com/straburzynski">Straburzyński</a>
                 </Footer>
             </Layout>
@@ -43,3 +47,5 @@ export default class AppLayout extends Component {
     }
 
 }
+
+export default withRouter(AppLayout);

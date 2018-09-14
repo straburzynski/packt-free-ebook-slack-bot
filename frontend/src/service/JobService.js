@@ -18,8 +18,8 @@ export function addJob(job) {
         })
 }
 
-export function editJob(id, job) {
-    return axios.put(`/jobs/${id}`, job)
+export function editJob(job) {
+    return axios.put(`/jobs/${job.id}`, job)
         .then(() => {
             openNotificationWithIcon('success', 'OK', 'Job updated successfully');
         })

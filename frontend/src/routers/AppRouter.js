@@ -3,7 +3,7 @@ import {Route, Switch} from 'react-router-dom';
 import JobAddContainer from "../pages/job/JobAddContainer";
 import JobListContainer from "../pages/job/JobListContainer";
 import JobEditContainer from "../pages/job/JobEditContainer";
-import NotFound from "../pages/not-found/NotFound";
+import NotFoundContainer from "../pages/not-found/NotFoundContainer";
 
 export default class AppRouter extends Component {
 
@@ -14,7 +14,7 @@ export default class AppRouter extends Component {
                 <Route path="/job/:id" component={JobEditContainer}/>
                 <Route path="/job" component={JobListContainer}/>
                 <Route path="/add" component={JobAddContainer}/>
-                <Route component={NotFound}/>
+                <Route component={NotFoundContainer}/>
             </Switch>
         )
     }

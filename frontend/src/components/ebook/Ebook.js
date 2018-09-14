@@ -18,7 +18,7 @@ export class Ebook extends React.Component {
             })
             .catch(error => {
                 const errorMessage = error.response.data.message ? ': ' + error.response.data.message : '';
-                openNotificationWithIcon('error', 'Error', 'Error creating job' + errorMessage);
+                openNotificationWithIcon('error', 'Error', 'Error creating job: ' + errorMessage);
             })
     };
 
@@ -29,22 +29,22 @@ export class Ebook extends React.Component {
     render() {
         if (this.state.ebook == null) {
             return (
-                <div style={{textAlign: "center"}}>
-                    <Icon type="loading" theme="outlined" style={{fontSize: '36px', color: '#08c'}}/>
+                <div className="text-center">
+                    <Icon type="loading" theme="outlined" className="custom-loader"/>
                 </div>
             )
         } else
             return (
                 <div>
                     <Row>
-                        <Col xs={24} sm={24} md={12} lg={6} xl={6} style={{textAlign: 'center'}}>
-                            <img src={this.state.ebook.imageUrl}/>
+                        <Col xs={24} sm={24} md={12} lg={8} xl={6} className="text-center">
+                            <img src={this.state.ebook.imageUrl} alt={this.state.ebook.title}/>
                         </Col>
-                        <Col  xs={24} sm={24} md={12} lg={16} xl={16} >
-                            <Card title={this.state.ebook.title} bordered={false} style={{width: '100%'}}>
-                                <p>{this.state.ebook.description}</p>
-                                <div style={{float: "right"}}>
-                                    <Button href={this.state.ebook.bookUrl} type="dashed" style={{marginRight: "15px"}}>
+                        <Col xs={24} sm={24} md={12} lg={16} xl={18}>
+                            <Card title={this.state.ebook.title} bordered={false} className="w-100">
+                                <p className="text-justify">{this.state.ebook.description}</p>
+                                <div className="float-right">
+                                    <Button href={this.state.ebook.bookUrl} type="dashed" className="m-15">
                                         More details
                                     </Button>
                                     <Button href="https://www.packtpub.com/packt/offers/free-learning">

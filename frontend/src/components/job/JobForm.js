@@ -4,6 +4,7 @@ import './jobForm.css';
 import moment from 'moment';
 import 'moment-timezone';
 import {addJob, editJob} from "../../service/JobService";
+import {withRouter} from "react-router-dom";
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -17,11 +18,12 @@ class JobForm extends React.Component {
             if (!err) {
                 values = this.prepareToSave(values);
                 if (this.props.job) {
-                    editJob(this.props.job.id, values);
+                    editJob(values);
+                    this.props.history.push('/');
                 } else {
                     addJob(values).then(res => {
                         if (res) {
-                            this.props.form.resetFields();
+                            this.props.history.push('/');
                         }
                     });
                 }
@@ -75,6 +77,13 @@ class JobForm extends React.Component {
         return (
             <div className="job">
                 <Form layout="vertical" onSubmit={this.handleSubmit}>
+                    <Form.Item
+                        label="Id"
+                        {...formItemLayout}>
+                        {getFieldDecorator('id', {})(
+                            <Input placeholder="Generated automatically" disabled={true}/>
+                        )}
+                    </Form.Item>
                     <Form.Item
                         label="Job name"
                         {...formItemLayout}
@@ -140,12 +149,13 @@ class JobForm extends React.Component {
 
 }
 
-export default Form.create(
+export default withRouter(Form.create(
     {
         mapPropsToFields(props) {
             if (props.job != null) {
                 const time = moment(props.job.scheduler.split(" ")[2] + ":" + props.job.scheduler.split(" ")[1], 'HH:mm');
                 return {
+                    id: Form.createFormField({...props.id, value: props.job.id}),
                     jobName: Form.createFormField({...props.jobName, value: props.job.jobName}),
                     time: Form.createFormField({...props.scheduler, value: time}),
                     webhook: Form.createFormField({...props.webhook, value: props.job.webhook}),
@@ -155,4 +165,4 @@ export default Form.create(
             }
         }
     }
-)(JobForm);
+)(JobForm));
