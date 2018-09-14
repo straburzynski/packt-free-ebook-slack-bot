@@ -3,7 +3,7 @@ import {Button, Form, Input, Switch, TimePicker} from 'antd';
 import './jobForm.css';
 import moment from 'moment';
 import 'moment-timezone';
-import {addJob, editJob} from "../service/JobService";
+import {addJob, editJob} from "../../service/JobService";
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);

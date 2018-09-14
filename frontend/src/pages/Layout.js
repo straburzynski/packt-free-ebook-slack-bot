@@ -11,8 +11,9 @@ export default class AppLayout extends Component {
         return (
             <Layout className="layout">
                 <Header>
-                    <div className="logo"/>
-                    <span className="title">Packt Slack Bot</span>
+                    <span className="title">
+                        Slackt <Icon type="right" theme="outlined" className="orange"/> Packt Slack Bot
+                    </span>
                     <Menu
                         className="top-menu"
                         theme="dark"
@@ -32,14 +33,10 @@ export default class AppLayout extends Component {
                     </Menu>
                 </Header>
                 <Content className="content">
-                    <div style={{background: '#fff', padding: 24, minHeight: 280}}>
-
                         <AppRouter/>
-
-                    </div>
                 </Content>
                 <Footer style={{textAlign: 'center'}}>
-                    Packt Slack Bot ©2018 <a href="http://github.com/straburzynski">Straburzyński</a>
+                    Slackt | Packt Slack Bot ©2018 <a href="http://github.com/straburzynski">Straburzyński</a>
                 </Footer>
             </Layout>
         );

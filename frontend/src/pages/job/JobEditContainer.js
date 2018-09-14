@@ -1,5 +1,5 @@
 import * as React from "react";
-import JobForm from "../../components/JobForm";
+import JobForm from "../../components/job/JobForm";
 import {getJob} from '../../service/JobService';
 import {openNotificationWithIcon} from "../../service/NotificationService";
 
@@ -25,7 +25,7 @@ class JobEditContainer extends React.Component {
     render() {
         if (this.state.job == null) {
             return (
-                <div className="job-edit-container">
+                <div className="container-card">
                     <h3>Job edit:</h3>
                     <p>id: {this.props.match.params.id}</p>
                     <JobForm/>
@@ -33,8 +33,8 @@ class JobEditContainer extends React.Component {
             )
         } else {
             return (
-                <div className="job-edit-container">
-                    <h3>Job edit:</h3>
+                <div className="container-card">
+                <h3>Job edit:</h3>
                     <p>id: {this.props.match.params.id}</p>
                     <JobForm job={this.state.job}/>
                 </div>

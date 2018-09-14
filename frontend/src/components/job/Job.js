@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {Avatar, Button, List, Modal} from 'antd';
-import {sendEbookToSlack} from '../service/SlackService';
-import {deleteJob} from '../service/JobService';
+import {sendEbookToSlack} from '../../service/SlackService';
+import {deleteJob} from '../../service/JobService';
 import './job.css'
 
 export class Job extends React.Component {
@@ -25,7 +25,6 @@ export class Job extends React.Component {
 
     render() {
         let that = this;
-
         function showDeleteConfirm() {
             Modal.confirm({
                 title: 'Are you sure delete this job?',

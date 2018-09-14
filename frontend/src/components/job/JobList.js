@@ -2,7 +2,7 @@ import * as React from "react";
 import Job from "./Job";
 import axios from "axios";
 import {List} from "antd";
-import {openNotificationWithIcon} from "../service/NotificationService";
+import {openNotificationWithIcon} from "../../service/NotificationService";
 
 class JobList extends React.Component {
 

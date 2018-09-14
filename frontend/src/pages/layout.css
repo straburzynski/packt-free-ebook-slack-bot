@@ -2,12 +2,15 @@
     min-width: 600px;
 }
 
-.logo {
-    width: 120px;
-    height: 31px;
-    background: rgba(255,255,255,.2);
-    margin: 16px 24px 16px 0;
-    float: left;
+.container-card {
+    background: #ffffff;
+    padding: 24px;
+    margin-bottom: 50px;
+
+}
+
+.orange {
+    color: #ec6611;
 }
 
 .title {
@@ -21,7 +24,7 @@
 }
 
 .content {
-    padding: 50px 50px;
+    padding: 50px 50px 0 50px;
 }
 
 .layout.ant-layout {
