@@ -1,9 +1,9 @@
 import * as React from "react";
-import {Button, DatePicker, Form, Input, Switch, TimePicker} from 'antd';
+import {Button, Form, Input, Switch, TimePicker} from 'antd';
 import './jobForm.css';
 import moment from 'moment';
 import 'moment-timezone';
-import {addJob} from "../service/JobService";
+import {addJob, editJob} from "../service/JobService";
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -16,7 +16,15 @@ class JobForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 values = this.prepareToSave(values);
-                addJob(values);
+                if (this.props.job) {
+                    editJob(this.props.job.id, values);
+                } else {
+                    addJob(values).then(res => {
+                        if (res) {
+                            this.props.form.resetFields();
+                        }
+                    });
+                }
             }
         });
     };
@@ -63,7 +71,6 @@ class JobForm extends React.Component {
         const jobNameError = isFieldTouched('jobName') && getFieldError('jobName');
         const webhookError = isFieldTouched('webhook') && getFieldError('webhook');
         const timeError = isFieldTouched('time') && getFieldError('time');
-        const startDateError = isFieldTouched('startDate') && getFieldError('startDate');
 
         return (
             <div className="job">
@@ -104,25 +111,10 @@ class JobForm extends React.Component {
                             <Input placeholder="Slack webhook URL"/>
                         )}
                     </Form.Item>
-
-                    <Form.Item
-                        label="Start date"
-                        {...formItemLayout}
-                        validateStatus={startDateError ? 'error' : ''}
-                        help={startDateError || ''}
-                    >
-                        {getFieldDecorator('startDate', {
-                            rules: [
-                                {type: 'object', required: true, message: 'Please select start date'}],
-                        })(
-                            <DatePicker/>
-                        )}
-                    </Form.Item>
-
-
                     <Form.Item
                         label="Active"
-                        {...formItemLayout}>
+                        {...formItemLayout}
+                    >
                         {getFieldDecorator('active', {valuePropName: 'checked'})(
                             <Switch/>
                         )}
@@ -135,9 +127,10 @@ class JobForm extends React.Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        {...formItemBtn}>
+                        {...formItemBtn}
+                    >
                         <Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())}>
-                            Save
+                            {this.props.job ? 'Save' : 'Create'}
                         </Button>
                     </Form.Item>
                 </Form>
@@ -151,13 +144,11 @@ export default Form.create(
     {
         mapPropsToFields(props) {
             if (props.job != null) {
-                console.log('mapPropsToFields', props);
                 const time = moment(props.job.scheduler.split(" ")[2] + ":" + props.job.scheduler.split(" ")[1], 'HH:mm');
                 return {
                     jobName: Form.createFormField({...props.jobName, value: props.job.jobName}),
-                    time: Form.createFormField({...props.scheduler,value: time}),
+                    time: Form.createFormField({...props.scheduler, value: time}),
                     webhook: Form.createFormField({...props.webhook, value: props.job.webhook}),
-                    // startDate: Form.createFormField({...props.startDate, value: props.job.jobName}),
                     active: Form.createFormField({...props.active, value: props.job.active}),
                     botName: Form.createFormField({...props.botName, value: props.job.botName}),
                 };

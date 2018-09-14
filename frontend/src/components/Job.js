@@ -1,45 +1,60 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {Avatar, Button, List, Modal} from 'antd';
-import Moment from "react-moment";
-import moment from 'moment';
+import {sendEbookToSlack} from '../service/SlackService';
+import {deleteJob} from '../service/JobService';
 import './job.css'
 
 export class Job extends React.Component {
-
-    startDate = () => {
-        return <Moment format="DD.MM.YYYY HH:mm">{this.props.startDate}</Moment>
-    };
-
-    endDate = () => {
-        const isDateValid = moment(this.props.endDate).isValid();
-        return isDateValid ? <Moment format="DD.MM.YYYY HH:mm">{this.props.startDate}</Moment> : "No end date"
-    };
 
     getSchedulerTime = () => {
         const timeArray = this.props.scheduler.split(" ");
         return timeArray[2] + ":" + timeArray[1];
     };
 
-    render() {
+    getBotName = () => {
+        const botName = this.props.botName;
+        if (botName) {
+            return (
+                <span>
+                     <strong>, bot name: </strong> {botName}
+                </span>
+            )
+        }
+    };
 
+    render() {
         let that = this;
 
         function showDeleteConfirm() {
             Modal.confirm({
                 title: 'Are you sure delete this job?',
-                content: 'Some descriptions',
+                content: 'This can\'t be undone',
                 okText: 'Yes',
                 okType: 'danger',
                 cancelText: 'No',
                 iconType: 'delete',
                 iconClassName: 'red',
                 onOk() {
-                    console.log('OK', that.props.id);
-                },
-                onCancel() {
-                    console.log('Cancel');
-                },
+                    deleteJob(that.props.id).then(() => {
+                        that.props.onDeletedJob();
+                    });
+                }
+            });
+        }
+
+        function showSendConfirm() {
+            Modal.confirm({
+                title: 'Are you sure send ebook?',
+                content: 'Ebook will be send to configured slack workspace',
+                okText: 'Yes',
+                okType: 'primary',
+                cancelText: 'No',
+                iconType: 'right',
+                iconClassName: 'blue',
+                onOk() {
+                    sendEbookToSlack(that.props.id);
+                }
             });
         }
 
@@ -51,9 +66,8 @@ export class Job extends React.Component {
                     <Link to={`/job/${this.props.id}`}>
                         <Button type="default" icon="edit">Edit</Button>
                     </Link>,
-                        <Button type="danger" icon="delete" onClick={showDeleteConfirm}>Delete</Button>
-
-
+                    <Button type="danger" icon="delete" onClick={showDeleteConfirm}>Delete</Button>,
+                    <Button type="primary" icon="play-circle" onClick={showSendConfirm}>Send now</Button>
                 ]}
             >
                 <List.Item.Meta
@@ -66,19 +80,14 @@ export class Job extends React.Component {
                         </Link>
                     }
                     description={
-                        <div>
-                            <p>
-                                <strong>Time: </strong> {this.getSchedulerTime()}, <strong>Date from: </strong>
-                                {this.startDate()}, <strong>Date to: </strong> {this.endDate()}, <strong>Bot name:
-                                </strong> {this.props.botName}
-                            </p>
-                        </div>
+                        <p>
+                            <strong>sending time: </strong> {this.getSchedulerTime()} {this.getBotName()}
+                        </p>
                     }
                 />
             </List.Item>
         )
     }
 }
-
 
 export default Job;

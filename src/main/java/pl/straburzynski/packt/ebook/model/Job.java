@@ -25,37 +25,27 @@ public class Job {
     @GeneratedValue
     private long id;
 
-    @Column(name = "job_name", unique = true, updatable = true, nullable = false)
+    @Column(name = "job_name", unique = true, nullable = false)
     private String jobName;
 
-    @Column(name = "bot_name", unique = false, updatable = true, nullable = true)
+    @Column(name = "bot_name")
     private String botName;
 
-    @Column(name = "channel", unique = false, updatable = true, nullable = true)
+    @Column(name = "channel")
     private String channel;
 
-    @Column(name = "webhook", unique = false, updatable = true, nullable = false)
+    @Column(name = "webhook", nullable = false)
     private String webhook;
 
-    @Column(name = "scheduler", unique = false, updatable = true, nullable = false)
+    @Column(name = "scheduler", nullable = false)
     private String scheduler;
 
-    @Column(name = "active", unique = false, updatable = true, nullable = false)
+    @Column(name = "active", nullable = false)
     private boolean active;
 
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @Column(name = "created_date", unique = false, updatable = true, nullable = false)
+    @Column(name = "created_date", updatable = false, nullable = false)
     private LocalDateTime createdDate;
-
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @Column(name = "start_date", unique = false, updatable = true, nullable = false)
-    private LocalDateTime startDate;
-
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @Column(name = "end_date", unique = false, updatable = true, nullable = true)
-    private LocalDateTime endDate;
 
 }

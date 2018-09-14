@@ -50,17 +50,19 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job saveJob(Job job) {
+    public Job saveJob(Job job) throws ParseException, SchedulerException {
         validationService.validate(job);
         job.setCreatedDate(LocalDateTime.now());
         Job savedJob = jobRepository.save(job);
-        schedulerJobService.createJob(job);
+        schedulerJobService.restartAllActivePacktJobs();
         return savedJob;
     }
 
     @Override
     public Job editJob(Job job) throws ParseException, SchedulerException {
         validationService.validate(job);
+        Job oldJob = jobRepository.getOne(job.getId());
+        job.setCreatedDate(oldJob.getCreatedDate());
         Job editedJob = jobRepository.save(job);
         schedulerJobService.restartAllActivePacktJobs();
         return editedJob;

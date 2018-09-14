@@ -44,8 +44,7 @@ public class JobControllerTest {
             .scheduler("* 30 13 ? * * *")
             .active(true)
             .createdDate(LocalDateTime.now())
-            .startDate(LocalDateTime.now())
-            .endDate(LocalDateTime.now()).build();
+            .build();
 
     private Job job2 = Job.builder()
             .id(2L)
@@ -56,8 +55,7 @@ public class JobControllerTest {
             .scheduler("* 30 13 ? * * *")
             .active(true)
             .createdDate(LocalDateTime.now())
-            .startDate(LocalDateTime.now())
-            .endDate(LocalDateTime.now()).build();
+            .build();
 
     @Before
     public void setUp() {
@@ -81,9 +79,7 @@ public class JobControllerTest {
                 .andExpect(jsonPath("$.webhook", is(job1.getWebhook())))
                 .andExpect(jsonPath("$.scheduler", is(job1.getScheduler())))
                 .andExpect(jsonPath("$.active", is(job1.isActive())))
-                .andExpect(jsonPath("$.createdDate", is(job1.getCreatedDate().toString())))
-                .andExpect(jsonPath("$.startDate", is(job1.getStartDate().toString())))
-                .andExpect(jsonPath("$.endDate", is(job1.getEndDate().toString())));
+                .andExpect(jsonPath("$.createdDate", is(job1.getCreatedDate().toString())));
         verify(jobService, times(1)).saveJob(job1);
         verifyNoMoreInteractions(jobService);
     }

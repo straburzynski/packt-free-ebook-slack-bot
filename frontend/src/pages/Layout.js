@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './layout.css'
-import {Layout, Menu} from 'antd';
+import {Icon, Layout, Menu} from 'antd';
 import AppRouter from "../routers/AppRouter";
 import {NavLink} from "react-router-dom";
 
@@ -20,10 +20,14 @@ export default class AppLayout extends Component {
                         defaultSelectedKeys={['2']}
                     >
                         <Menu.Item key="job-list">
-                            <NavLink to="/" activeClassName="active" exact={true}>All jobs</NavLink>
+                            <NavLink to="/" activeClassName="active" exact={true}>
+                                <Icon type="ordered-list" theme="outlined" /> All jobs
+                            </NavLink>
                         </Menu.Item>
                         <Menu.Item key="job-create">
-                            <NavLink to="/add" activeClassName="active" exact={true}>Create job</NavLink>
+                            <NavLink to="/add" activeClassName="active" exact={true}>
+                                <Icon type="plus" theme="outlined" /> Create job
+                            </NavLink>
                         </Menu.Item>
                     </Menu>
                 </Header>

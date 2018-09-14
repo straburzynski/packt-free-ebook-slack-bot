@@ -13,7 +13,6 @@ import pl.straburzynski.packt.ebook.exception.JobNotFoundException;
 import pl.straburzynski.packt.ebook.model.scheduler.JobDescriptor;
 import pl.straburzynski.packt.ebook.service.SchedulerJobService;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -42,8 +41,7 @@ public class SchedulerJobControllerTest {
             .jobId("1")
             .chrono("* 30 13 ? * * *")
             .webhook("http://test.com/x/y/z")
-            .startDate("2018-01-01 00:00:00")
-            .endDate("2018-01-01 00:00:00").build();
+            .build();
 
     private JobDescriptor jobDescriptor2 = JobDescriptor.builder()
             .name("Name 2")
@@ -51,8 +49,7 @@ public class SchedulerJobControllerTest {
             .jobId("2")
             .chrono("* 30 13 ? * * *")
             .webhook("http://test.com/x/y/z")
-            .startDate(LocalDateTime.now().toString())
-            .endDate(LocalDateTime.now().toString()).build();
+            .build();
 
     @Before
     public void setUp() {

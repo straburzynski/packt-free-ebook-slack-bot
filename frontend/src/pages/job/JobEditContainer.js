@@ -1,6 +1,7 @@
 import * as React from "react";
 import JobForm from "../../components/JobForm";
 import {getJob} from '../../service/JobService';
+import {openNotificationWithIcon} from "../../service/NotificationService";
 
 class JobEditContainer extends React.Component {
 
@@ -10,18 +11,15 @@ class JobEditContainer extends React.Component {
 
     constructor(props) {
         super(props);
-        getJob(this.props.match.params.id).then(response => {
-            console.log(response.data);
-            this.setState({
-                job: response.data
-            });
-        })
-            .catch(error => {
-                console.log(error);
+        getJob(this.props.match.params.id)
+            .then(response => {
+                this.setState({
+                    job: response.data
+                });
             })
-            .then(() => {
-                console.log('end request')
-            });
+            .catch(() => {
+                openNotificationWithIcon('error', 'Error', 'Error loading jobs');
+            })
     }
 
     render() {
@@ -30,7 +28,7 @@ class JobEditContainer extends React.Component {
                 <div className="job-edit-container">
                     <h3>Job edit:</h3>
                     <p>id: {this.props.match.params.id}</p>
-                    <JobForm />
+                    <JobForm/>
                 </div>
             )
         } else {

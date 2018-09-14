@@ -17,7 +17,6 @@ import pl.straburzynski.packt.ebook.model.slack.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,11 +119,10 @@ public class SlackServiceImpl implements SlackService {
     @Override
     public void sendMessageToSlack(Long jobId) throws URISyntaxException {
         log.info("Sending ebook to slack, job no: " + jobId);
-        LocalDateTime now = LocalDateTime.now();
         Job job = jobService.findById(jobId).orElseThrow(
                 () -> new JobNotFoundException("Job " + jobId + "not found!")
         );
-        if (job.isActive() && now.isAfter(job.getStartDate()) && handleEndDate(job.getEndDate(), now)) {
+        if (job.isActive()) {
             log.info("Task with job " + jobId + " is ready to execute");
             Ebook ebook = ebookService.getTodayFreeEbookDataFromPackt();
             Message message = prepareSlackMessage(ebook, job);
@@ -133,14 +131,6 @@ public class SlackServiceImpl implements SlackService {
             doRestTemplateExchange(ebook, message, restTemplate, uri);
         } else {
             log.info("Task with job " + jobId + " is out of date range or disabled");
-        }
-    }
-
-    private boolean handleEndDate(LocalDateTime endDate, LocalDateTime now) {
-        if (endDate == null) {
-            return true;
-        } else {
-            return now.isBefore(endDate);
         }
     }
 

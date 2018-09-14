@@ -13,7 +13,7 @@ public interface JobService {
     List<Job> getAllActiveJobs();
     Optional<Job> findById(Long id);
     Optional<Job> findByJobName(String jobName);
-    Job saveJob(Job job);
+    Job saveJob(Job job) throws ParseException, SchedulerException;
     Job editJob(Job job) throws ParseException, SchedulerException;
     void deleteJob(Long id) throws ParseException, SchedulerException;
 }

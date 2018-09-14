@@ -27,8 +27,6 @@ public class JobDescriptor {
     private String jobId;
     private String chrono;
     private String webhook;
-    private String startDate;
-    private String endDate;
     private Map<String, Object> data = new LinkedHashMap<>();
 
     public static JobDescriptor buildDescriptor(JobDetail jobDetail) {
@@ -38,8 +36,6 @@ public class JobDescriptor {
                 .jobId(jobDetail.getJobDataMap().getString("jobId"))
                 .chrono(jobDetail.getJobDataMap().getString("chrono"))
                 .webhook(jobDetail.getJobDataMap().getString("webhook"))
-                .startDate(jobDetail.getJobDataMap().getString("startDate"))
-                .endDate(jobDetail.getJobDataMap().getString("endDate"))
                 .build();
     }
 
@@ -55,8 +51,6 @@ public class JobDescriptor {
         jobDataMap.put("jobId", jobId);
         jobDataMap.put("webhook", webhook);
         jobDataMap.put("chrono", chrono);
-        jobDataMap.put("startDate", startDate);
-        jobDataMap.put("endDate", endDate);
         return newJob(SendEbookJob.class)
                 .withIdentity(name, selectedGroup)
                 .usingJobData(jobDataMap)

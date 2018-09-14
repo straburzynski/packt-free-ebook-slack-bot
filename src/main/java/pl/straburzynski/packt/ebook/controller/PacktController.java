@@ -38,6 +38,13 @@ public class PacktController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("send-to-slack/{jobId}")
+    @ApiOperation("Send ebook message to custom webhook from job")
+    public ResponseEntity<?> send(@PathVariable("jobId") Long jobId) throws URISyntaxException {
+        slackService.sendMessageToSlack(jobId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("check-credentials")
     @ApiOperation("Check if login/password are correct")
     public ResponseEntity<?> checkCredentials() {

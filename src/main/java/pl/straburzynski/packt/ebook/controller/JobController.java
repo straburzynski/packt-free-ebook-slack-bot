@@ -24,7 +24,7 @@ public class JobController {
 
     @PostMapping
     @ApiOperation("Create new job")
-    public ResponseEntity<?> createJob(@RequestBody Job job) {
+    public ResponseEntity<?> createJob(@RequestBody Job job) throws ParseException, SchedulerException {
         return new ResponseEntity<>(jobService.saveJob(job), HttpStatus.CREATED);
     }
 

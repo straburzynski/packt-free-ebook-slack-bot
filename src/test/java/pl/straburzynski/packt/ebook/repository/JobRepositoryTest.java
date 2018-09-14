@@ -28,9 +28,7 @@ public class JobRepositoryTest {
             .webhook("http://test.com/x/y/z")
             .scheduler("* 30 13 ? * * *")
             .active(true)
-            .createdDate(LocalDateTime.now())
-            .startDate(LocalDateTime.now())
-            .endDate(LocalDateTime.now()).build();
+            .createdDate(LocalDateTime.now()).build();
 
     private Job job2 = Job.builder()
             .jobName("Job name 2")
@@ -39,9 +37,7 @@ public class JobRepositoryTest {
             .webhook("http://test.com/x/y/z")
             .scheduler("* 30 13 ? * * *")
             .active(false)
-            .createdDate(LocalDateTime.now())
-            .startDate(LocalDateTime.now())
-            .endDate(LocalDateTime.now()).build();
+            .createdDate(LocalDateTime.now()).build();
 
     @Before
     public void setUp() {

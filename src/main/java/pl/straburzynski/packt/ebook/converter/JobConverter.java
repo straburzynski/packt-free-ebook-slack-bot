@@ -16,8 +16,6 @@ public class JobConverter {
                 .jobId(String.valueOf(job.getId()))
                 .webhook(job.getWebhook())
                 .chrono(job.getScheduler())
-                .startDate(job.getStartDate().toString())
-                .endDate(job.getEndDate() != null ? job.getEndDate().toString() : "No end date")
                 .group("PacktGroup")
                 .build();
     }
