@@ -30,7 +30,6 @@ class JobEditContainer extends React.Component {
                     <CustomBreadcrumb breadcrumbs={['Home', 'Edit job']}/>
                     <div className="container-card">
                         <h3>Job edit:</h3>
-                        <p>id: {this.props.match.params.id}</p>
                         <JobForm/>
                     </div>
                 </div>
@@ -41,7 +40,6 @@ class JobEditContainer extends React.Component {
                     <CustomBreadcrumb breadcrumbs={['Home', 'Edit job']}/>
                     <div className="container-card">
                         <h3>Job edit:</h3>
-                        <p>id: {this.props.match.params.id}</p>
                         <JobForm job={this.state.job}/>
                     </div>
                 </div>

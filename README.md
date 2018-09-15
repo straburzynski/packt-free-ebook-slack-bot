@@ -1,4 +1,4 @@
-# Packt free ebook - slack bot
+# Slackt > Packt Slack Bot
 
 Slack bot for sending daily free random ebook from Packt Publishing.
 
@@ -6,25 +6,41 @@ Slack bot for sending daily free random ebook from Packt Publishing.
 
 #### Description
 
-1. Getting and parsing data from Packt Publishing website.
+1. Parsing data from Packt Publishing website.
 2. Mapping ebook data to Slack message format.
 3. Executing POST request to Slack webhook url.
+4. Multiple slack workspaces handling.
 
-#### Technology
+![list preview](img/list.png)
 
-* Java Spring Boot
-* REST
-* Jsoup / Xsoup
-* Lombok
-* Maven
 
-#### Build and run
+![edit preview](img/edit.png)
+
+#### Stack
+
+* Backend: Java, Spring Boot, JPA, REST, Jsoup, Lombok, Maven, Swagger, H2 DB, Quartz
+* Frontend: React, Ant Design, Axios, Moment
+
+#### Build and run Java application with embedded React (localhost:8099)
 
 ```sh
 $ mvn clean install
 ```
 ```sh
 $ java -jar target/ebook-0.0.1-SNAPSHOT.jar
+```
+
+#### Develop Java (localhost:8099) and React (localhost:3000):
+```sh
+$ mvn spring-boot:run
+```
+```sh
+$ cd frontend && npm start
+```
+
+#### Run Java tests:
+```sh
+$ mvn test
 ```
 
 #### Features
@@ -39,7 +55,6 @@ $ java -jar target/ebook-0.0.1-SNAPSHOT.jar
 
 - [x] Save daily ebook to db, if exists for current day get from db instead of remote request
 - [x] Enums for styles, types, colors etc.
-- [ ] Disable sending book to slack with null fields -> exceptions 
 - [x] Move cron expression to properties
 - [x] Job model with CRUD for managing multiple slack workspaces/channels
 - [x] Swagger UI for documenting REST API
@@ -58,9 +73,12 @@ Create new slack job in db:
   "botName": "Packt Publishing Bot",
   "channel": "#ebook",
   "createdDate": "2018-06-23T20:27:55.393Z",
-  "jobName": "Job for Example Slack",
+  "jobName": "CompanySlack",
   "scheduler": "* 30 13 ? * * *",
   "webhook": "https://hooks.slack.com/services/xxxxxxxxx/yyyyyyyyy/zzzzzzzzzzzzzzzzzzzzzzzz"
 }
 ```
 
+More information in swagger (localhost:8099/swagger-ui.html):
+
+![Swagger preview](img/swagger.png)

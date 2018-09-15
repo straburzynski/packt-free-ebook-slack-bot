@@ -23,7 +23,7 @@
     float: right;
 }
 
-.ant-menu-item-selected {
+.ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
     background: none;
 }
 
