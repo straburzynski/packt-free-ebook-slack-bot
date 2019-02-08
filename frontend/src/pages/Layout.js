@@ -11,6 +11,10 @@ export class AppLayout extends Component {
         this.props.history.push('/');
     };
 
+    getCurrentYear = () => {
+        return new Date().getFullYear();
+    };
+
     render() {
         return (
             <Layout className="layout">
@@ -40,7 +44,7 @@ export class AppLayout extends Component {
                         <AppRouter/>
                 </Content>
                 <Footer className="text-center">
-                    Slackt | Packt Slack Bot ©2018 <a href="http://github.com/straburzynski">Straburzyński</a>
+                    Slackt | Packt Slack Bot © {this.getCurrentYear()} <a href="http://github.com/straburzynski">Straburzyński</a>
                 </Footer>
             </Layout>
         );

@@ -38,7 +38,7 @@ export class Ebook extends React.Component {
                 <div>
                     <Row>
                         <Col xs={24} sm={24} md={12} lg={8} xl={6} className="text-center">
-                            <img src={this.state.ebook.imageUrl} alt={this.state.ebook.title}/>
+                            <img className='w-100' src={this.state.ebook.imageUrl} alt={this.state.ebook.title}/>
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={16} xl={18}>
                             <Card title={this.state.ebook.title} bordered={false} className="w-100">
