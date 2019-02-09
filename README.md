@@ -60,6 +60,7 @@ $ mvn test
 - [x] Swagger UI for documenting REST API
 - [x] ReactJs as UI
 - [x] Frontend validation with notifications
+- [ ] Free Ebook - Archive by day (db / page)
 
 
 #### Example POST request for creating new job

@@ -42,26 +42,42 @@ public class EbookServiceImpl implements EbookService {
     public Ebook getTodayFreeEbookDataFromPackt() {
 
         JBrowserDriver driver = new JBrowserDriver(WebDriverUtils.settings);
-        driver.get(applicationConfig.getPacktFreeEbookUrl());
-        String imageUrl = driver.findElementByClassName(BOOK_IMAGE_CLASS).getAttribute("src");
-        driver.findElementByClassName(BOOK_URL_CLASS).click();
 
-        Ebook ebook = Ebook.builder()
-                           .title(driver.findElementByClassName(BOOK_TITLE_CLASS).getText())
-                           .description(driver.findElementByClassName(BOOK_DESC_CLASS).getText())
-                           .bookUrl(driver.getCurrentUrl())
-                           .imageUrl(imageUrl)
-                           .build();
-        driver.quit();
+        Ebook ebook = new Ebook();
 
-        ValidationMessage validationMessage = Validator.validateEbook(ebook);
-        if (validationMessage.isValid()) {
-            return ebook;
-        } else {
-            String messages = validationMessage.getMessages().toString();
-            throw new InvalidEbookException(messages);
+        try {
+            log.info("Opening connection!");
+            driver.get(applicationConfig.getPacktFreeEbookUrl());
+            log.info("Connection opened!");
+
+            String imageUrl = driver.findElementByClassName(BOOK_IMAGE_CLASS).getAttribute("src");
+            driver.findElementByClassName(BOOK_URL_CLASS).click();
+
+            ebook = Ebook.builder()
+                    .title(driver.findElementByClassName(BOOK_TITLE_CLASS).getText())
+                    .description(driver.findElementByClassName(BOOK_DESC_CLASS).getText())
+                    .bookUrl(driver.getCurrentUrl())
+                    .imageUrl(imageUrl)
+                    .build();
+
+            ValidationMessage validationMessage = Validator.validateEbook(ebook);
+            if (validationMessage.isValid()) {
+                log.info("Ebook data downloaded!");
+                return ebook;
+            } else {
+                String messages = validationMessage.getMessages().toString();
+                throw new InvalidEbookException(messages);
+            }
+
+        } catch (Exception ex) {
+            log.info("Connection error!");
+            log.info(ex.getMessage());
+        } finally {
+            log.info("Closing connection!");
+            driver.quit();
         }
 
+        return ebook;
     }
 
     @Override
