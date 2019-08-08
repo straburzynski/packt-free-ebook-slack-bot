@@ -1,12 +1,19 @@
 package pl.straburzynski.packt.ebook.service;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlImage;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.machinepublishers.jbrowserdriver.JBrowserDriver;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.straburzynski.packt.ebook.config.ApplicationConfig;
 import pl.straburzynski.packt.ebook.exception.ClaimingEbookException;
+import pl.straburzynski.packt.ebook.exception.CouldNotConnectToPacktWebsiteException;
 import pl.straburzynski.packt.ebook.exception.InvalidEbookException;
 import pl.straburzynski.packt.ebook.exception.LoginFailedException;
 import pl.straburzynski.packt.ebook.model.Ebook;
@@ -14,14 +21,17 @@ import pl.straburzynski.packt.ebook.model.ValidationMessage;
 import pl.straburzynski.packt.ebook.utils.Validator;
 import pl.straburzynski.packt.ebook.utils.WebDriverUtils;
 
-@Log
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+@Slf4j
 @Service
 public class EbookServiceImpl implements EbookService {
 
-    private final String BOOK_TITLE_CLASS = "book-top-block-info-title float-left";
-    private final String BOOK_DESC_CLASS = "book-info-bottom-indetail-text";
-    private final String BOOK_IMAGE_CLASS = "product__img";
-    private final String BOOK_URL_CLASS = "product__img-wrapper";
+    private final String BOOK_TITLE_XPATH = "//*[@itemprop='name']";
+    private final String BOOK_DESC_XPATH = "//*[@itemprop='description']";
+    private final String BOOK_IMAGE_URL_XPATH = "//img[@class='product__img']";
+    private final String BOOK_URL_XPATH = "//a[@class='product__img-wrapper']";
 
     private final String BOOK_CLAIM_BUTTON_ID = "free-learning-claim";
     private final String USER_LOGIN_PAGE_URL = "https://www.packtpub.com/login";
@@ -38,21 +48,69 @@ public class EbookServiceImpl implements EbookService {
         this.applicationConfig = applicationConfig;
     }
 
+    private static WebClient initializeClient() {
+        final WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setPrintContentOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setDoNotTrackEnabled(true);
+        webClient.getOptions().setPopupBlockerEnabled(true);
+        webClient.getOptions().setTimeout(10000);
+        return webClient;
+    }
+
     @Override
     public Ebook getTodayFreeEbookDataFromPackt() {
 
-        JBrowserDriver driver = new JBrowserDriver(WebDriverUtils.settings);
-        driver.get(applicationConfig.getPacktFreeEbookUrl());
-        String imageUrl = driver.findElementByClassName(BOOK_IMAGE_CLASS).getAttribute("src");
-        driver.findElementByClassName(BOOK_URL_CLASS).click();
+        WebClient webClient = initializeClient();
+
+        HtmlPage page = null;
+        try {
+            page = webClient.getPage(applicationConfig.getPacktFreeEbookUrl());
+        } catch (IOException e) {
+            String message = "Could not connect to main page";
+            log.error(message);
+            throw new CouldNotConnectToPacktWebsiteException(message);
+        }
+
+        waitForJS();
+
+        HtmlImage image = page.getFirstByXPath(BOOK_IMAGE_URL_XPATH);
+        String imageUrl = image.getSrcAttribute();
+
+        HtmlAnchor detailsPage = page.getFirstByXPath(BOOK_URL_XPATH);
+        String bookUrl;
+
+        try {
+            bookUrl = page.getFullyQualifiedUrl(detailsPage.getHrefAttribute()).toString();
+        } catch (MalformedURLException e) {
+            String message = "Could not format URL for book details page";
+            log.error(message);
+            throw new CouldNotConnectToPacktWebsiteException(message);
+        }
+
+        try {
+            page = detailsPage.click();
+        } catch (IOException e) {
+            String message = "Could not open book details page";
+            log.error(message);
+            throw new CouldNotConnectToPacktWebsiteException(message);
+        }
+
+        HtmlElement titleElement = page.getFirstByXPath(BOOK_TITLE_XPATH);
+        String title = titleElement.getTextContent();
+
+        HtmlElement descriptionElement = page.getFirstByXPath(BOOK_DESC_XPATH);
+        String description = descriptionElement.getTextContent();
 
         Ebook ebook = Ebook.builder()
-                           .title(driver.findElementByClassName(BOOK_TITLE_CLASS).getText())
-                           .description(driver.findElementByClassName(BOOK_DESC_CLASS).getText())
-                           .bookUrl(driver.getCurrentUrl())
-                           .imageUrl(imageUrl)
-                           .build();
-        driver.quit();
+                .title(title)
+                .description(description)
+                .bookUrl(bookUrl)
+                .imageUrl(imageUrl)
+                .build();
 
         ValidationMessage validationMessage = Validator.validateEbook(ebook);
         if (validationMessage.isValid()) {
@@ -61,7 +119,17 @@ public class EbookServiceImpl implements EbookService {
             String messages = validationMessage.getMessages().toString();
             throw new InvalidEbookException(messages);
         }
+    }
 
+    private void waitForJS() {
+        // wait for js workaround
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            String message = "Error waiting for JS";
+            log.error(message);
+            throw new CouldNotConnectToPacktWebsiteException(message);
+        }
     }
 
     @Override
@@ -71,7 +139,7 @@ public class EbookServiceImpl implements EbookService {
         log.info("Claiming ebook");
         driver.navigate().to(applicationConfig.getPacktFreeEbookUrl());
         if (WebDriverUtils.isElementPresent(By.id(BOOK_CLAIM_BUTTON_ID), driver)) {
-            log.info("Ebook: " + driver.findElement(By.className(BOOK_TITLE_CLASS)).getText());
+            log.info("Ebook: " + driver.findElement(By.xpath(BOOK_TITLE_XPATH)).getText());
             driver.findElement(By.id(BOOK_CLAIM_BUTTON_ID)).click();
             if (!driver.getCurrentUrl().equals(MY_BOOKS_PAGE_URL)) {
                 throw new ClaimingEbookException("Error claiming ebook, captcha not solved");
@@ -105,5 +173,4 @@ public class EbookServiceImpl implements EbookService {
             throw new LoginFailedException("Login failed");
         }
     }
-
 }

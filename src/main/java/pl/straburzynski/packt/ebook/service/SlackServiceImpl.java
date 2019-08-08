@@ -12,11 +12,11 @@ import org.springframework.web.client.RestTemplate;
 import pl.straburzynski.packt.ebook.config.ApplicationConfig;
 import pl.straburzynski.packt.ebook.exception.JobNotFoundException;
 import pl.straburzynski.packt.ebook.exception.SendingMessageToSlackException;
-import pl.straburzynski.packt.ebook.model.*;
+import pl.straburzynski.packt.ebook.model.Ebook;
+import pl.straburzynski.packt.ebook.model.Job;
 import pl.straburzynski.packt.ebook.model.slack.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +87,7 @@ public class SlackServiceImpl implements SlackService {
                 .build());
         return actions;
     }
-    
+
     private String prepareUrl(String url) {
         return url.replace(" ", "%20");
     }
@@ -107,7 +107,7 @@ public class SlackServiceImpl implements SlackService {
 
     @Override
     @Scheduled(cron = "${app.scheduler-time}")
-    public void sendMessageToSlack() throws URISyntaxException {
+    public void sendMessageToSlack() throws Exception {
         Ebook ebook = ebookService.getTodayFreeEbookDataFromPackt();
         Message message = prepareSlackMessage(ebook);
         RestTemplate restTemplate = new RestTemplate();
@@ -117,7 +117,7 @@ public class SlackServiceImpl implements SlackService {
 
 
     @Override
-    public void sendMessageToSlack(Long jobId) throws URISyntaxException {
+    public void sendMessageToSlack(Long jobId) throws Exception {
         log.info("Sending ebook to slack, job no: " + jobId);
         Job job = jobService.findById(jobId).orElseThrow(
                 () -> new JobNotFoundException("Job " + jobId + "not found!")

@@ -9,8 +9,6 @@ import pl.straburzynski.packt.ebook.model.Ebook;
 import pl.straburzynski.packt.ebook.service.EbookService;
 import pl.straburzynski.packt.ebook.service.SlackService;
 
-import java.net.URISyntaxException;
-
 @RestController
 @RequestMapping(value = "/packt")
 public class PacktController {
@@ -33,14 +31,14 @@ public class PacktController {
 
     @PostMapping("send-to-slack")
     @ApiOperation("Send ebook message to slack with default configuration")
-    public ResponseEntity<?> send() throws URISyntaxException {
+    public ResponseEntity<?> send() throws Exception {
         slackService.sendMessageToSlack();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("send-to-slack/{jobId}")
     @ApiOperation("Send ebook message to custom webhook from job")
-    public ResponseEntity<?> send(@PathVariable("jobId") Long jobId) throws URISyntaxException {
+    public ResponseEntity<?> send(@PathVariable("jobId") Long jobId) throws Exception {
         slackService.sendMessageToSlack(jobId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

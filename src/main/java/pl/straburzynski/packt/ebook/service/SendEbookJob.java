@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import java.net.URISyntaxException;
-
 @Slf4j
 @Service
 public class SendEbookJob implements Job {
@@ -22,12 +20,12 @@ public class SendEbookJob implements Job {
         JobDataMap map = context.getMergedJobDataMap();
         try {
             doTask(map);
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             log.debug("Error parsing URL from task job id " + map.getString("jobId"));
         }
     }
 
-    private void doTask(JobDataMap map) throws URISyntaxException {
+    private void doTask(JobDataMap map) throws Exception {
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
         Long jobId = Long.parseLong(map.getString("jobId"));
         log.info("Parsing JobDataMap, task: " + jobId);
